@@ -4,20 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>現場のカンタンAI-OCR 「みっけOCR」</title>
-    <!-- Favicon -->
     <link rel="icon" href="https://spc-jp.github.io/mikke-ocr/favicon.png" type="image/png">
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons for beautiful layout -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Chart.js for automatic dashboard generation -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
         body {
             font-family: 'Noto Sans JP', sans-serif;
             background-color: #f7fafc;
-            /* スマホでのピンチイン・アウトによる表示崩れを防ぐ */
             touch-action: manipulation;
         }
         .brand-font {
@@ -28,36 +23,31 @@
 <body class="min-h-screen flex flex-col text-slate-800">
 
     <!-- ヘッダー -->
-    <header class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md sticky top-0 z-40">
+    <header style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); box-shadow: 0 2px 12px rgba(0,0,0,0.3);" class="text-white sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
-            <!-- ロゴとタイトルエリア -->
             <div class="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-                <div class="bg-white p-1 rounded-xl shadow-inner flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
-                    <img src="https://spc-jp.github.io/mikke-ocr/favicon.png" alt="みっけOCR ロゴ" class="w-full h-full object-contain">
+                <div style="background: linear-gradient(135deg, #10b981, #059669); border-radius: 10px;" class="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 shadow-md">
+                    <img src="https://spc-jp.github.io/mikke-ocr/favicon.png" alt="みっけOCR ロゴ" class="w-7 h-7 sm:w-8 sm:h-8 object-contain">
                 </div>
                 <div>
                     <h1 class="text-lg sm:text-2xl font-black tracking-wider brand-font flex items-center gap-1.5 sm:gap-2">
-                        みっけOCR <span class="text-[9px] sm:text-xs bg-yellow-400 text-teal-950 px-2 py-0.5 rounded-full font-bold">プロトタイプ</span>
+                        みっけOCR <span style="background:#f59e0b; color:#0f172a;" class="text-[9px] sm:text-xs px-2 py-0.5 rounded-full font-black">プロトタイプ</span>
                     </h1>
-                    <p class="text-[9px] sm:text-xs text-teal-100 font-medium">中小企業の「めんどくさい」を30秒で解決するOCR</p>
+                    <p style="color:#94a3b8;" class="text-[9px] sm:text-xs font-medium">中小企業の「めんどくさい」を30秒で解決するOCR</p>
                 </div>
             </div>
             
-            <!-- 操作メニュー -->
             <div class="w-full sm:w-auto flex items-center justify-end gap-2 font-semibold">
-                <!-- 使い方ボタン -->
-                <button onclick="openHelpModal()" class="text-xs bg-teal-700/50 hover:bg-teal-700/80 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1.5 border border-teal-500/30 transition-all font-bold text-white">
+                <button onclick="openHelpModal()" style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); color:#cbd5e1;" class="text-xs px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1.5 transition-all font-bold hover:bg-white/10">
                     <i data-lucide="help-circle" class="w-4 h-4"></i>
                     <span>使い方</span>
                 </button>
 
-                <!-- 設定（歯車）ボタンとドロップダウン -->
                 <div class="relative">
-                    <button id="settings-btn" class="text-xs bg-teal-700/50 hover:bg-teal-700/80 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-1.5 border border-teal-500/30 transition-all font-bold text-white">
+                    <button id="settings-btn" style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); color:#cbd5e1;" class="text-xs px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-1.5 transition-all font-bold hover:bg-white/10">
                         <i data-lucide="settings" class="w-4 h-4"></i>
                         <span>設定</span>
                     </button>
-                    <!-- ドロップダウンメニュー -->
                     <div id="settings-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white text-slate-800 rounded-xl shadow-xl border border-slate-200 py-1.5 z-50">
                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">デモデータ操作</div>
                         <button onclick="loadSampleSalesData()" class="w-full text-left px-4 py-2 text-xs hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium">
@@ -71,15 +61,13 @@
                     </div>
                 </div>
 
-                <!-- 【体験用】無料試用カウントステータス -->
-                <span id="trial-counter-badge" class="text-xs bg-emerald-700/50 text-white px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-teal-500/30 transition-all font-bold">
+                <span id="trial-counter-badge" style="background:#1e293b; border:1px solid #334155; color:#94a3b8;" class="text-xs px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 font-bold">
                     <i data-lucide="hourglass" class="w-3.5 h-3.5 text-yellow-300"></i>
-                    <span>無料枠: あと <span id="trial-count">3</span> 回</span>
+                    <span>無料枠: あと <span id="trial-count" style="color:#10b981;" class="font-black">3</span> 回</span>
                 </span>
 
-                <!-- ライセンス認証ボタン (ロック解除) -->
-                <button id="auth-btn" onclick="openAuthModal()" class="text-xs bg-amber-500 hover:bg-amber-600 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-amber-400/30 transition-all font-black text-slate-950 shadow-sm animate-pulse">
-                    <i id="auth-btn-icon" data-lucide="lock" class="w-4 h-4 text-slate-950"></i>
+                <button id="auth-btn" onclick="openAuthModal()" style="background: linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a;" class="text-xs px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 transition-all font-black shadow-md animate-pulse hover:opacity-90">
+                    <i id="auth-btn-icon" data-lucide="lock" class="w-4 h-4"></i>
                     <span id="auth-btn-text">ライセンス認証</span>
                 </button>
             </div>
@@ -90,7 +78,7 @@
     <main class="flex-grow max-w-6xl w-full mx-auto p-3 sm:p-4 md:py-8 flex flex-col gap-5 sm:gap-6">
         
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
-            <!-- 左側：設定・画像アップロードエリア (5カラム分) -->
+            <!-- 左側：設定・画像アップロードエリア -->
             <div class="lg:col-span-5 flex flex-col gap-5 sm:gap-6">
                 
                 <!-- 1. モード選択 -->
@@ -125,7 +113,6 @@
                         2. 帳票を読み込ませる
                     </h2>
 
-                    <!-- ドロップエリア (スマホではタップ領域) -->
                     <div id="drop-zone" class="border-2 border-dashed border-slate-300 hover:border-teal-500 rounded-xl p-5 sm:p-6 flex flex-col items-center justify-center gap-2.5 sm:gap-3 cursor-pointer bg-slate-50/50 hover:bg-teal-50/10 transition-all flex-grow min-h-[160px] sm:min-h-[200px]">
                         <input type="file" id="file-input" accept="image/*,application/pdf" class="hidden">
                         <div class="bg-teal-100 text-teal-700 p-3 sm:p-4 rounded-full">
@@ -137,11 +124,9 @@
                         </div>
                     </div>
 
-                    <!-- モバイル専用：スマホ対応カメラ＆簡単デモ -->
                     <div class="mt-4 flex flex-col gap-2">
-                        <!-- カメラ起動 (スマホでの最大のハイライトボタン) -->
-                        <button onclick="triggerCamera()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-sm active:scale-98">
-                            <i data-lucide="camera" class="w-4 h-4 sm:w-5 sm:h-5 text-white animate-pulse"></i>
+                        <button onclick="triggerCamera()" style="background: linear-gradient(135deg, #0f172a, #1e3a5f);" class="w-full text-white py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 hover:opacity-90">
+                            <i data-lucide="camera" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 animate-pulse"></i>
                             スマホのカメラで帳票を撮影する
                         </button>
                         
@@ -151,7 +136,6 @@
                             <div class="flex-grow border-t border-slate-200"></div>
                         </div>
 
-                        <!-- デモ体験 -->
                         <button onclick="runDemo()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white py-3 px-4 rounded-xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98">
                             <i data-lucide="sparkles" class="w-4 h-4 sm:w-5 sm:h-5 text-yellow-200"></i>
                             <span>【カンタン体験】デモデータを読み込む</span>
@@ -161,11 +145,10 @@
 
             </div>
 
-            <!-- 右側：OCR結果表示エリア (7カラム分) -->
+            <!-- 右側：OCR結果表示エリア -->
             <div class="lg:col-span-7 flex flex-col gap-5 sm:gap-6">
                 
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 flex-grow flex flex-col min-h-[420px] sm:min-h-[450px]">
-                    <!-- 結果エリアヘッダー -->
                     <div class="flex justify-between items-center border-b border-slate-100 pb-3 sm:pb-4 mb-3 sm:mb-4">
                         <h2 class="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-1.5 sm:gap-2">
                             <i data-lucide="file-check-2" class="w-4 h-4 sm:w-5 sm:h-5 text-teal-600"></i>
@@ -180,7 +163,7 @@
 
                     <!-- ローディング画面 -->
                     <div id="loading-view" class="hidden flex-grow flex flex-col items-center justify-center py-10 sm:py-12">
-                        <div class="relative w-16 h-16 sm:w-20 sm:h-20">
+                        <div class="relative w-20 h-20">
                             <div class="absolute inset-0 rounded-full border-4 border-teal-200 animate-pulse"></div>
                             <div class="absolute inset-0 rounded-full border-4 border-t-teal-600 animate-spin"></div>
                         </div>
@@ -202,15 +185,12 @@
                     <!-- 実際の結果表示 -->
                     <div id="result-view" class="hidden flex-grow flex flex-col gap-5 sm:gap-6">
                         
-                        <!-- プレビューと基本情報 (スマホでは自動で縦に綺麗に並ぶ) -->
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-150">
-                            <!-- 画像プレビュー -->
                             <div class="md:col-span-4 flex items-center justify-center bg-slate-200 rounded-lg overflow-hidden min-h-[100px] max-h-[140px] sm:max-h-[180px] border border-slate-300">
                                 <img id="preview-image" src="" alt="帳票プレビュー" class="object-contain w-full h-full">
                                 <div id="preview-svg-placeholder" class="hidden w-full h-full flex items-center justify-center bg-teal-50">
                                 </div>
                             </div>
-                            <!-- AIからのコメント -->
                             <div class="md:col-span-8 flex flex-col justify-center text-left">
                                 <span class="text-[9px] sm:text-[10px] uppercase font-bold tracking-widest text-teal-600">AIアドバイス</span>
                                 <h3 class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5 sm:mt-1 flex items-center gap-1">
@@ -223,7 +203,6 @@
                             </div>
                         </div>
 
-                        <!-- 抽出データテーブル (スマホ幅に完璧に適合・縮みすぎを防止する横スクロール対応) -->
                         <div class="flex flex-col">
                             <div class="flex justify-between items-center mb-1.5 sm:mb-2">
                                 <span class="text-[10px] sm:text-xs font-bold text-slate-500">整理された項目一覧</span>
@@ -231,14 +210,13 @@
                                     <i data-lucide="check" class="w-2.5 h-2.5 sm:w-3 sm:h-3"></i> 自動項目あてはめ完了
                                 </span>
                             </div>
-                            <!-- overflow-x-auto によりスマホでも表がはみ出さず、指で左右に動かせます -->
                             <div class="border border-slate-200 rounded-xl overflow-hidden shadow-sm overflow-x-auto">
                                 <table class="w-full text-left border-collapse min-w-[340px] sm:min-w-[450px]">
                                     <thead>
-                                        <tr class="bg-slate-100 text-slate-600 text-[10px] sm:text-xs font-bold border-b border-slate-200">
-                                            <th class="p-3 w-1/3">項目名</th>
-                                            <th class="p-3">読み取り結果</th>
-                                            <th class="p-3 text-right w-20">精度</th>
+                                        <tr style="background:#0f172a;" class="text-[10px] sm:text-xs font-bold border-b border-slate-700">
+                                            <th class="p-3 w-1/3" style="color:#94a3b8;">項目名</th>
+                                            <th class="p-3" style="color:#94a3b8;">読み取り結果</th>
+                                            <th class="p-3 text-right w-20" style="color:#94a3b8;">精度</th>
                                         </tr>
                                     </thead>
                                     <tbody id="result-table-body" class="text-[11px] sm:text-xs divide-y divide-slate-100 bg-white">
@@ -247,7 +225,6 @@
                             </div>
                         </div>
 
-                        <!-- アクションボタン (スマホ縦並び/タブレット横並びを柔軟に対応) -->
                         <div class="bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-150 flex flex-col sm:flex-row justify-between items-center gap-3">
                             <div class="text-left w-full sm:w-auto">
                                 <p class="text-xs font-bold text-slate-700">次の作業へ連携：</p>
@@ -258,7 +235,7 @@
                                     <i data-lucide="copy" class="w-4 h-4 text-slate-500"></i>
                                     行コピー
                                 </button>
-                                <button onclick="copyToClipboardExcel()" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                <button onclick="copyToClipboardExcel()" style="background: linear-gradient(135deg, #059669, #047857);" class="flex-1 sm:flex-initial text-white font-bold text-xs py-2.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all shadow-sm hover:opacity-90">
                                     <i data-lucide="table-properties" class="w-4 h-4"></i>
                                     Excel用コピー
                                 </button>
@@ -289,16 +266,13 @@
                 </button>
             </div>
 
-            <!-- グラフレイアウト -->
             <div class="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-center">
-                <!-- 左側：折れ線グラフ (売上推移) -->
                 <div class="md:col-span-7 bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-150 h-[240px] sm:h-[280px] flex flex-col">
                     <span class="text-xs font-bold text-slate-600 mb-2 block">月次売上の推移 (過去6ヶ月)</span>
                     <div class="flex-grow relative w-full h-full">
                         <canvas id="line-chart-canvas"></canvas>
                     </div>
                 </div>
-                <!-- 右側：円グラフ (取引先別構成比) -->
                 <div class="md:col-span-5 bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-150 h-[240px] sm:h-[280px] flex flex-col">
                     <span class="text-xs font-bold text-slate-600 mb-2 block">取引先別の売上シェア</span>
                     <div class="flex-grow relative flex items-center justify-center w-full h-full">
@@ -314,15 +288,15 @@
     </main>
 
     <!-- フッター -->
-    <footer class="bg-slate-900 text-slate-400 py-6 text-center border-t border-slate-800 text-xs mt-auto">
+    <footer style="background:#0f172a; border-top: 1px solid #1e293b;" class="text-slate-500 py-6 text-center text-xs mt-auto">
         <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center gap-2">
-                <img src="https://spc-jp.github.io/mikke-ocr/favicon.png" class="w-5 h-5 object-contain" alt="みっけOCR">
+                <img src="https://spc-jp.github.io/mikke-ocr/favicon.png" class="w-5 h-5 object-contain opacity-70" alt="みっけOCR">
                 <p>© 2026 みっけOCR. All Rights Reserved. 現場主義 of 超シンプルシステム</p>
             </div>
             <div class="flex gap-4">
-                <button onclick="openTosModal()" class="hover:text-white transition-colors">利用規約</button>
-                <button onclick="openPrivacyModal()" class="hover:text-white transition-colors">プライバシーポリシー</button>
+                <button onclick="openTosModal()" class="hover:text-emerald-400 transition-colors">利用規約</button>
+                <button onclick="openPrivacyModal()" class="hover:text-emerald-400 transition-colors">プライバシーポリシー</button>
             </div>
         </div>
     </footer>
@@ -385,7 +359,7 @@
         </div>
     </div>
 
-    <!-- カスタムメッセージモーダル (Alert代わり) -->
+    <!-- カスタムメッセージモーダル -->
     <div id="modal" class="fixed inset-0 bg-slate-950/50 flex items-center justify-center z-50 hidden p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl border border-slate-200 transform scale-95 transition-transform duration-200">
             <div class="flex items-center gap-3 text-amber-500 mb-3">
@@ -441,7 +415,7 @@
                     <div class="flex gap-3">
                         <div class="bg-teal-50 text-teal-700 p-2 rounded-lg h-9 w-9 flex items-center justify-center flex-shrink-0 font-bold border border-teal-100">3</div>
                         <div>
-                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm">AIの特性をご理解ください（免責）</h4>
+                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm">AI的特性をご理解ください（免責）</h4>
                             <p class="text-slate-500 mt-0.5">傾いた書類やぐちゃぐちゃな手書き文字など、AIの認識精度は100%ではありません。大切な数字やお金に関わるデータは、最終的に人間の目でご確認をお願いします。</p>
                         </div>
                     </div>
@@ -530,7 +504,7 @@
             
             <div class="space-y-3">
                 <p class="text-xs text-slate-500 leading-relaxed">
-                    本プロトタイプで「本物のAI-OCR機能（実働接続）」をお試しいただくには、発行されたライセンスパスコードを入力してください。
+                    本プロトタイプで「本物のAI-OCR機能（実動接続）」をお試しいただくには、発行されたライセンスパスコードを入力してください。
                 </p>
                 <div class="bg-teal-50 border border-teal-150 p-2.5 rounded-lg text-[10px] text-teal-800 leading-relaxed">
                     <strong>💡 月額9,800円プラン 認証パスコード：</strong><br>
@@ -544,16 +518,15 @@
 
             <div class="flex justify-end gap-2 mt-5 pt-3 border-t border-slate-100">
                 <button onclick="closeAuthModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded font-medium">キャンセル</button>
-                <button onclick="verifyPasscode()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-1.5 rounded font-bold transition-colors">認証解除</button>
+                <button onclick="verifyPasscode()" style="background: linear-gradient(135deg, #059669, #047857);" class="text-white text-xs px-3.5 py-1.5 rounded font-bold transition-all hover:opacity-90">認証解除</button>
             </div>
         </div>
     </div>
 
-    <!-- Stripe決済誘導モーダル (4回目の処理で表示される) -->
+    <!-- Stripe決済誘導モーダル -->
     <div id="stripe-modal" class="fixed inset-0 bg-slate-950/70 flex items-center justify-center z-50 hidden p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 text-center transform scale-95 transition-all duration-300 flex flex-col items-center">
             
-            <!-- アイコングラフィック -->
             <div class="bg-teal-50 text-teal-600 p-4 rounded-full mb-4 ring-8 ring-teal-500/10">
                 <i data-lucide="crown" class="w-10 h-10 text-teal-600 animate-bounce"></i>
             </div>
@@ -572,13 +545,11 @@
                 </ul>
             </div>
 
-            <!-- Stripe決済リンク (本物のStripe決済ページへジャンプ) -->
-            <a href="https://mikke-ocr.yymmatsu.workers.dev/stripe-checkout" target="_blank" onclick="simulateStripeCheckout()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-3.5 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98">
-                <i data-lucide="credit-card" class="w-4 h-4 sm:w-5 sm:h-5 text-teal-200"></i>
+            <a href="https://buy.stripe.com/00wfZg9uO0AJ1yv3kEcV213" target="_blank" onclick="simulateStripeCheckout()" style="background: linear-gradient(135deg, #059669, #047857);" class="w-full text-white py-3.5 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98 hover:opacity-90">
+                <i data-lucide="credit-card" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-200"></i>
                 Stripeでプランに登録する (月額9,800円)
             </a>
 
-            <!-- 既に決済した方向けのパスコード入力への案内 -->
             <button onclick="switchToAuthFromStripe()" class="text-[11px] text-slate-400 hover:text-teal-600 font-bold mt-4 underline transition-colors">
                 すでにプラン決済済みですか？（パスコードを入力）
             </button>
@@ -587,66 +558,66 @@
 
     <!-- JavaScript ロジック -->
     <script>
-        // --- ⚙️ 環境設定：Cloudflare Workers用のエンドポイント ---
         const WORKERS_API_URL = "https://mikke-ocr.yymmatsu.workers.dev";
 
-        // Lucideアイコンの初期化
         lucide.createIcons();
 
-        // アプリの状態
-        let currentMode = 'receipt'; // 'receipt', 'handwriting', 'invoice'
-        let base64Image = null; // ユーザーがアップロードした画像のBase64データ
-        let lastExtractedData = null; // コピー用に直近 of 抽出データを保持
-        let isLicensed = false; // サブスク決済（ライセンス認証完了）状態のフラグ
+        let currentMode = 'receipt';
+        let base64Image = null;
+        let lastExtractedData = null;
+        let isLicensed = false;
 
-        // グラフインスタンスの保持
         let lineChart = null;
         let pieChart = null;
 
-        // アプリ起動時の処理
         window.onload = function() {
-            // LocalStorageから認証状態を復元
             const savedLicense = localStorage.getItem('mikke_ocr_licensed');
             if (savedLicense === 'true') {
                 isLicensed = true;
                 setAuthUIState(true);
             }
 
-            // 無料お試し回数の同期
-            updateTrialBadge();
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success') === 'true' || urlParams.get('licensed') === 'true') {
+                isLicensed = true;
+                localStorage.setItem('mikke_ocr_licensed', 'true');
+                setAuthUIState(true);
+                
+                window.history.replaceState({}, document.title, window.location.pathname);
+                
+                setTimeout(() => {
+                    showModal('🎉 ご契約ありがとうございます！', 'Stripeでの「月額9,800円プラン」の決済が正常に完了し、無制限ライセンスが完全自動でアクティベートされました。本日より現場のAI-OCR機能をノンストレス・無制限でお楽しみいただけます！');
+                }, 800);
+            }
 
-            // ドラッグ＆ドロップイベントのバインド
+            updateTrialBadge();
             initDragAndDrop();
         };
 
-        // 無料体験カウント処理 (3回制限システム)
         function checkAndIncrementTrial() {
-            // ライセンス認証完了済みの場合は制限なし
             if (isLicensed) return true;
 
             let currentTrials = parseInt(localStorage.getItem('mikke_ocr_trials') || '0');
 
             if (currentTrials >= 3) {
-                // 4回目（お試し上限到達）
                 openStripeModal();
                 return false;
             }
 
-            // カウントを増やして保存
             currentTrials++;
             localStorage.setItem('mikke_ocr_trials', currentTrials.toString());
             updateTrialBadge();
             return true;
         }
 
-        // 体験回数のバッジ更新
         function updateTrialBadge() {
             const countSpan = document.getElementById('trial-count');
             const badge = document.getElementById('trial-counter-badge');
             
             if (isLicensed) {
-                // 有料プラン稼働中
-                badge.className = "text-xs bg-emerald-600 text-white px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-emerald-500 font-bold";
+                badge.style.background = '#064e3b';
+                badge.style.border = '1px solid #065f46';
+                badge.style.color = '#6ee7b7';
                 badge.innerHTML = `<i data-lucide="crown" class="w-3.5 h-3.5 text-yellow-300"></i> <span>有料プラン：無制限</span>`;
             } else {
                 let currentTrials = parseInt(localStorage.getItem('mikke_ocr_trials') || '0');
@@ -654,21 +625,24 @@
                 if (countSpan) countSpan.innerText = left;
 
                 if (left === 0) {
-                    badge.className = "text-xs bg-red-100 text-red-700 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-red-200 font-bold animate-pulse";
-                    badge.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> <span>体験枠終了</span>`;
+                    badge.style.background = '#450a0a';
+                    badge.style.border = '1px solid #7f1d1d';
+                    badge.style.color = '#fca5a5';
+                    badge.innerHTML = `<i data-lucide="hourglass" class="w-3.5 h-3.5"></i> <span>体験枠終了</span>`;
                 } else {
-                    badge.className = "text-xs bg-emerald-700/50 text-white px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-teal-500/30 font-bold";
-                    badge.innerHTML = `<i data-lucide="hourglass" class="w-3.5 h-3.5 text-yellow-300"></i> <span>無料枠: あと <span id="trial-count">${left}</span> 回</span>`;
+                    badge.style.background = '#1e293b';
+                    badge.style.border = '1px solid #334155';
+                    badge.style.color = '#94a3b8';
+                    badge.innerHTML = `<i data-lucide="hourglass" class="w-3.5 h-3.5 text-yellow-300"></i> <span>無料枠: あと <span style="color:#10b981;font-weight:900;">${left}</span> 回</span>`;
                 }
             }
             lucide.createIcons();
         }
 
-        // Stripe決済リンクをシミュレートクリック
         function simulateStripeCheckout() {
             showToast('Stripe決済ページへジャンプ中...');
             setTimeout(() => {
-                showModal('Stripeご登録後の流れ', 'Stripeで月額9,800円プランのお支払いが完了すると、ライセンスパスコード「ocr-mikke-2025」が発行されます。アプリ内の認証画面、またはStripe誘導画面下部よりパスコードを入力し、制限を完全に解除してください。');
+                showModal('Stripeご登録後の流れ', 'Stripeで月額9,800円プランのお支払いが完了すると、自動的に画面が切り替わるか、ライセンスパスコード「ocr-mikke-2025」が発行されます。アプリ内の認証画面よりパスコードを入力するか、Stripe誘導画面下部より進んでください。');
             }, 1000);
         }
 
@@ -677,7 +651,6 @@
             openAuthModal();
         }
 
-        // モーダルの開閉
         function openStripeModal() {
             document.getElementById('stripe-modal').classList.remove('hidden');
         }
@@ -685,7 +658,6 @@
             document.getElementById('stripe-modal').classList.add('hidden');
         }
 
-        // UIイベント制御: 歯車設定ボタンとドロップダウン
         const settingsBtn = document.getElementById('settings-btn');
         const settingsDropdown = document.getElementById('settings-dropdown');
         
@@ -694,7 +666,6 @@
             settingsDropdown.classList.toggle('hidden');
         });
 
-        // 画面のどこかをクリックしたら各種メニューを閉じる
         document.addEventListener('click', () => {
             settingsDropdown.classList.add('hidden');
         });
@@ -703,7 +674,6 @@
             e.stopPropagation();
         });
 
-        // 使い方モーダル
         function openHelpModal() {
             document.getElementById('help-modal').classList.remove('hidden');
         }
@@ -711,7 +681,6 @@
             document.getElementById('help-modal').classList.add('hidden');
         }
 
-        // ライセンス認証モーダル
         function openAuthModal() {
             document.getElementById('auth-modal').classList.remove('hidden');
         }
@@ -720,7 +689,6 @@
             document.getElementById('passcode-input').value = "";
         }
 
-        // パスコード検証ロジック (ocr-mikke-2025)
         function verifyPasscode() {
             const input = document.getElementById('passcode-input').value.trim();
             if (input === "ocr-mikke-2025") {
@@ -739,24 +707,22 @@
             const btn = document.getElementById('auth-btn');
 
             if (authenticated) {
-                btn.className = "text-xs bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-emerald-500/30 transition-all font-black text-white shadow-sm";
-                btn.removeAttribute('style'); // アニメーション除去
+                btn.style.background = 'linear-gradient(135deg, #059669, #047857)';
+                btn.style.color = '#ffffff';
                 btn.classList.remove('animate-pulse');
-                
-                // アイコンをアンロックに書き換える
                 btn.innerHTML = `<i data-lucide="unlock" class="w-4 h-4 text-white"></i> <span>認証完了（本物接続中）</span>`;
             } else {
-                btn.className = "text-xs bg-amber-500 hover:bg-amber-600 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-amber-400/30 transition-all font-black text-slate-950 shadow-sm animate-pulse";
-                btn.innerHTML = `<i data-lucide="lock" class="w-4 h-4 text-slate-950"></i> <span>ライセンス認証</span>`;
+                btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                btn.style.color = '#0f172a';
+                btn.classList.add('animate-pulse');
+                btn.innerHTML = `<i data-lucide="lock" class="w-4 h-4"></i> <span>ライセンス認証</span>`;
             }
             lucide.createIcons();
         }
 
-        // モード変更
         function setMode(mode) {
             currentMode = mode;
             
-            // ボタンのアクティブ表現切り替え
             const modes = ['receipt', 'handwriting', 'invoice'];
             modes.forEach(m => {
                 const btn = document.getElementById(`btn-mode-${m}`);
@@ -769,7 +735,6 @@
                 }
             });
 
-            // 説明文切り替え
             const desc = document.getElementById('mode-desc');
             if (mode === 'receipt') {
                 desc.innerText = "店舗のレシートや手書き領収書から「日付」「店舗名」「合計金額」「消費税」などを自動抽出し、仕訳に活用できるデータを作ります。";
@@ -780,7 +745,6 @@
             }
         }
 
-        // ドラッグ＆ドロップおよびファイル入力処理
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
 
@@ -822,9 +786,7 @@
             }, 1000);
         }
 
-        // ファイル読み込み処理
         function handleFile(file) {
-            // 体験カウントチェック (4回目ならStripeを立ち上げる)
             if (!checkAndIncrementTrial()) return;
 
             if (!file.type.startsWith('image/')) {
@@ -840,7 +802,6 @@
             reader.onload = function(e) {
                 base64Image = e.target.result;
                 
-                // 認証済みか、Workers連携が存在する場合
                 if (isLicensed && WORKERS_API_URL !== "") {
                     runActualWorkersOCR(base64Image);
                 } else {
@@ -850,11 +811,8 @@
             reader.readAsDataURL(file);
         }
 
-        // 【デモ実行機能】
         function runDemo(userUploadedImg = null) {
-            // 無料回数チェック
             if (userUploadedImg === null) {
-                // デモボタンを直接クリックした時の判定
                 if (!checkAndIncrementTrial()) return;
             }
 
@@ -898,7 +856,7 @@
                     } else {
                         previewImgSrc = "https://images.unsplash.com/photo-1450133064473-71024230f91b?q=80&w=300&auto=format&fit=crop";
                         demoData = {
-                            summary: "【デモ結果】一般的なビジネス請求書です。振込先口座情報が最下部に極小 of 文字で書かれていましたが、銀行コードまで完璧に網羅しました。二重払いの注意喚起チェックもクリアしています。",
+                            summary: "【デモ結果】一般的なビジネス請求書です。振込先口座情報が最下部に極小の文字で書かれていましたが、銀行コードまで完璧に網羅しました。二重払いの注意喚起チェックもクリアしています。",
                             extractedData: [
                                 { key: "請求元企業名", value: "株式会社グローバルテック (登録番号: T1234567890123)", confidence: "高" },
                                 { key: "請求金額 (税込)", value: "￥352,000", confidence: "高" },
@@ -922,7 +880,6 @@
             }, 800);
         }
 
-        // 【Cloudflare Workers連携実稼動】
         async function runActualWorkersOCR(imgBase64) {
             setLoading(true, "Cloudflare Workers経由でAIが超高精度解析中...");
 
@@ -977,7 +934,6 @@
             }
         }
 
-        // 表示の切り替え
         function setLoading(isLoading, text = "読み込み中...") {
             const loadingView = document.getElementById('loading-view');
             const placeholderView = document.getElementById('placeholder-view');
@@ -998,7 +954,6 @@
             }
         }
 
-        // 抽出された結果をテーブルとしてレンダリング
         function renderResult(data, imgSrc) {
             lastExtractedData = data;
             
@@ -1045,7 +1000,6 @@
             lucide.createIcons();
         }
 
-        // HTMLエスケープ処理
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/&/g, '&amp;')
@@ -1055,7 +1009,6 @@
                       .replace(/'/g, '&#039;');
         }
 
-        // --- クリップボードコピー機能群 ---
         function copyToClipboardText() {
             if (!lastExtractedData) return;
             let text = "";
@@ -1079,28 +1032,33 @@
         }
 
         function executeClipboardCopy(text, successMsg) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMsg);
+                }).catch(() => {
+                    fallbackCopy(text, successMsg);
+                });
+            } else {
+                fallbackCopy(text, successMsg);
+            }
+        }
+
+        function fallbackCopy(text, successMsg) {
             const tempTextArea = document.createElement('textarea');
             tempTextArea.value = text;
             tempTextArea.style.position = 'fixed';
             tempTextArea.style.left = '-9999px';
             document.body.appendChild(tempTextArea);
             tempTextArea.select();
-
             try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showToast(successMsg);
-                } else {
-                    console.error('コピーに失敗しました');
-                }
+                document.execCommand('copy');
+                showToast(successMsg);
             } catch (err) {
-                console.error('コピー失敗:', err);
+                showToast('コピーに失敗しました。手動でコピーしてください。');
             }
-
             document.body.removeChild(tempTextArea);
         }
 
-        // トースト通知
         function showToast(message) {
             const toast = document.getElementById('toast');
             const toastText = document.getElementById('toast-text');
@@ -1115,7 +1073,6 @@
             }, 3000);
         }
 
-        // モーダル通知
         function showModal(title, desc) {
             const modal = document.getElementById('modal');
             document.getElementById('modal-title').innerText = title;
@@ -1127,7 +1084,6 @@
             document.getElementById('modal').classList.add('hidden');
         }
 
-        // --- ダッシュボード連携ロジック ---
         function loadSampleSalesData() {
             settingsDropdown.classList.add('hidden');
             
@@ -1137,7 +1093,6 @@
             if (lineChart) lineChart.destroy();
             if (pieChart) pieChart.destroy();
 
-            // 1. 売上推移（折れ線グラフ）
             const ctxLine = document.getElementById('line-chart-canvas').getContext('2d');
             lineChart = new Chart(ctxLine, {
                 type: 'line',
@@ -1171,7 +1126,6 @@
                 }
             });
 
-            // 2. 取引先構成（ドーナツ円グラフ）
             const ctxPie = document.getElementById('pie-chart-canvas').getContext('2d');
             pieChart = new Chart(ctxPie, {
                 type: 'doughnut',
@@ -1203,7 +1157,6 @@
             showToast('自動集計ダッシュボードを生成しました！');
         }
 
-        // デモデータの完全クリア
         function clearDemoData() {
             settingsDropdown.classList.add('hidden');
 
@@ -1224,20 +1177,16 @@
 
             base64Image = null;
             lastExtractedData = null;
-            isLicensed = false;
-            localStorage.removeItem('mikke_ocr_licensed');
             localStorage.setItem('mikke_ocr_trials', '0');
-            setAuthUIState(false);
             updateTrialBadge();
 
             showToast('すべてのデータをクリア・リセットしました。');
         }
 
-        // --- ⚖️ 利用規約・プライバシーポリシーモーダル制御 ---
         function openTosModal() {
             const modal = document.getElementById('tos-modal');
             modal.classList.remove('hidden');
-            lucide.createIcons(); // モーダル内のアイコン読み込み
+            lucide.createIcons();
         }
         function closeTosModal() {
             document.getElementById('tos-modal').classList.add('hidden');
