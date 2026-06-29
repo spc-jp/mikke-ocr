@@ -71,6 +71,12 @@
                     </div>
                 </div>
 
+                <!-- 【体験用】無料試用カウントステータス -->
+                <span id="trial-counter-badge" class="text-xs bg-emerald-700/50 text-white px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-teal-500/30 transition-all font-bold">
+                    <i data-lucide="hourglass" class="w-3.5 h-3.5 text-yellow-300"></i>
+                    <span>無料枠: あと <span id="trial-count">3</span> 回</span>
+                </span>
+
                 <!-- ライセンス認証ボタン (ロック解除) -->
                 <button id="auth-btn" onclick="openAuthModal()" class="text-xs bg-amber-500 hover:bg-amber-600 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-amber-400/30 transition-all font-black text-slate-950 shadow-sm animate-pulse">
                     <i id="auth-btn-icon" data-lucide="lock" class="w-4 h-4 text-slate-950"></i>
@@ -317,7 +323,6 @@
             <div class="flex gap-4">
                 <button onclick="openTosModal()" class="hover:text-white transition-colors">利用規約</button>
                 <button onclick="openPrivacyModal()" class="hover:text-white transition-colors">プライバシーポリシー</button>
-                <a href="mailto:info@mikke-ocr.jp" class="hover:text-white transition-colors">お問合せ</a>
             </div>
         </div>
     </footer>
@@ -428,8 +433,8 @@
                     <div class="flex gap-3">
                         <div class="bg-teal-50 text-teal-700 p-2 rounded-lg h-9 w-9 flex items-center justify-center flex-shrink-0 font-bold border border-teal-100">2</div>
                         <div>
-                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm">お互いの健全な利用のために</h4>
-                            <p class="text-slate-500 mt-0.5">月額料金には一定枚数分のAI使用料が含まれています。システムの安定稼働のため、過度な連続スキャンや、自動化スクリプト等による不正な大量負荷はお控えください。</p>
+                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm">分かりやすい定額サブスクリプション制</h4>
+                            <p class="text-slate-500 mt-0.5">本アプリはシンプルで使いやすい「月額9,800円（税込）」の定額ライセンス制を採用しています。面倒な初期設定費用や枚数ごとの従量課金は不要で、毎月定額で安心して使い放題いただけます。</p>
                         </div>
                     </div>
 
@@ -510,7 +515,7 @@
         </div>
     </div>
 
-    <!-- ライセンス認証モーダル (ロック解除用のパスコード入力) -->
+    <!-- ライセンス認証モーダル -->
     <div id="auth-modal" class="fixed inset-0 bg-slate-950/60 flex items-center justify-center z-50 hidden p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 transform scale-95 transition-transform duration-200 flex flex-col">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
@@ -528,8 +533,8 @@
                     本プロトタイプで「本物のAI-OCR機能（実働接続）」をお試しいただくには、発行されたライセンスパスコードを入力してください。
                 </p>
                 <div class="bg-teal-50 border border-teal-150 p-2.5 rounded-lg text-[10px] text-teal-800 leading-relaxed">
-                    <strong>💡 デモ実演用の認証パスコード：</strong><br>
-                    <code class="font-mono bg-white px-1 border border-slate-200 rounded">mikke-safe-2026</code> または <code class="font-mono bg-white px-1 border border-slate-200 rounded">spc-mikke-9800</code>
+                    <strong>💡 月額9,800円プラン 認証パスコード：</strong><br>
+                    <code class="font-mono bg-white px-1 border border-slate-200 rounded">ocr-mikke-2025</code>
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-600 mb-1">パスコードを入力</label>
@@ -541,6 +546,42 @@
                 <button onclick="closeAuthModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded font-medium">キャンセル</button>
                 <button onclick="verifyPasscode()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3.5 py-1.5 rounded font-bold transition-colors">認証解除</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Stripe決済誘導モーダル (4回目の処理で表示される) -->
+    <div id="stripe-modal" class="fixed inset-0 bg-slate-950/70 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 text-center transform scale-95 transition-all duration-300 flex flex-col items-center">
+            
+            <!-- アイコングラフィック -->
+            <div class="bg-teal-50 text-teal-600 p-4 rounded-full mb-4 ring-8 ring-teal-500/10">
+                <i data-lucide="crown" class="w-10 h-10 text-teal-600 animate-bounce"></i>
+            </div>
+            
+            <h3 class="text-lg sm:text-xl font-black text-slate-900 brand-font">無料体験の回数制限に達しました</h3>
+            <p class="text-xs text-slate-400 mt-1">「みっけOCR」を体験いただき、ありがとうございます！</p>
+            
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-150 my-5 text-left w-full">
+                <p class="text-[11px] text-slate-500 leading-relaxed">
+                    無料体験枠（3回）をすべて消化しました。続けてご利用いただくには、セキュリティが高く安全なStripe経由での<strong>月額プラン（月額 9,800円）</strong>へご登録ください。
+                </p>
+                <ul class="text-[10px] text-teal-800 font-bold space-y-1 mt-2.5">
+                    <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> 月額 9,800円 定額で使い放題</li>
+                    <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> 事前の面倒な読み取り枠設定不要</li>
+                    <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-teal-600"></i> 会計・売上自動ダッシュボード連携</li>
+                </ul>
+            </div>
+
+            <!-- Stripe決済リンク (本物のStripe決済ページへジャンプ) -->
+            <a href="https://mikke-ocr.yymmatsu.workers.dev/stripe-checkout" target="_blank" onclick="simulateStripeCheckout()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-3.5 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-98">
+                <i data-lucide="credit-card" class="w-4 h-4 sm:w-5 sm:h-5 text-teal-200"></i>
+                Stripeでプランに登録する (月額9,800円)
+            </a>
+
+            <!-- 既に決済した方向けのパスコード入力への案内 -->
+            <button onclick="switchToAuthFromStripe()" class="text-[11px] text-slate-400 hover:text-teal-600 font-bold mt-4 underline transition-colors">
+                すでにプラン決済済みですか？（パスコードを入力）
+            </button>
         </div>
     </div>
 
@@ -556,7 +597,7 @@
         let currentMode = 'receipt'; // 'receipt', 'handwriting', 'invoice'
         let base64Image = null; // ユーザーがアップロードした画像のBase64データ
         let lastExtractedData = null; // コピー用に直近 of 抽出データを保持
-        let isLicensed = false; // ライセンス認証ロック状態（初期値は未認証、デモのみ）
+        let isLicensed = false; // サブスク決済（ライセンス認証完了）状態のフラグ
 
         // グラフインスタンスの保持
         let lineChart = null;
@@ -564,16 +605,85 @@
 
         // アプリ起動時の処理
         window.onload = function() {
-            // LocalStorageから認証ステータスを復元
+            // LocalStorageから認証状態を復元
             const savedLicense = localStorage.getItem('mikke_ocr_licensed');
             if (savedLicense === 'true') {
                 isLicensed = true;
                 setAuthUIState(true);
             }
 
+            // 無料お試し回数の同期
+            updateTrialBadge();
+
             // ドラッグ＆ドロップイベントのバインド
             initDragAndDrop();
         };
+
+        // 無料体験カウント処理 (3回制限システム)
+        function checkAndIncrementTrial() {
+            // ライセンス認証完了済みの場合は制限なし
+            if (isLicensed) return true;
+
+            let currentTrials = parseInt(localStorage.getItem('mikke_ocr_trials') || '0');
+
+            if (currentTrials >= 3) {
+                // 4回目（お試し上限到達）
+                openStripeModal();
+                return false;
+            }
+
+            // カウントを増やして保存
+            currentTrials++;
+            localStorage.setItem('mikke_ocr_trials', currentTrials.toString());
+            updateTrialBadge();
+            return true;
+        }
+
+        // 体験回数のバッジ更新
+        function updateTrialBadge() {
+            const countSpan = document.getElementById('trial-count');
+            const badge = document.getElementById('trial-counter-badge');
+            
+            if (isLicensed) {
+                // 有料プラン稼働中
+                badge.className = "text-xs bg-emerald-600 text-white px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-emerald-500 font-bold";
+                badge.innerHTML = `<i data-lucide="crown" class="w-3.5 h-3.5 text-yellow-300"></i> <span>有料プラン：無制限</span>`;
+            } else {
+                let currentTrials = parseInt(localStorage.getItem('mikke_ocr_trials') || '0');
+                let left = Math.max(0, 3 - currentTrials);
+                if (countSpan) countSpan.innerText = left;
+
+                if (left === 0) {
+                    badge.className = "text-xs bg-red-100 text-red-700 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-red-200 font-bold animate-pulse";
+                    badge.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> <span>体験枠終了</span>`;
+                } else {
+                    badge.className = "text-xs bg-emerald-700/50 text-white px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-teal-500/30 font-bold";
+                    badge.innerHTML = `<i data-lucide="hourglass" class="w-3.5 h-3.5 text-yellow-300"></i> <span>無料枠: あと <span id="trial-count">${left}</span> 回</span>`;
+                }
+            }
+            lucide.createIcons();
+        }
+
+        // Stripe決済リンクをシミュレートクリック
+        function simulateStripeCheckout() {
+            showToast('Stripe決済ページへジャンプ中...');
+            setTimeout(() => {
+                showModal('Stripeご登録後の流れ', 'Stripeで月額9,800円プランのお支払いが完了すると、ライセンスパスコード「ocr-mikke-2025」が発行されます。アプリ内の認証画面、またはStripe誘導画面下部よりパスコードを入力し、制限を完全に解除してください。');
+            }, 1000);
+        }
+
+        function switchToAuthFromStripe() {
+            closeStripeModal();
+            openAuthModal();
+        }
+
+        // モーダルの開閉
+        function openStripeModal() {
+            document.getElementById('stripe-modal').classList.remove('hidden');
+        }
+        function closeStripeModal() {
+            document.getElementById('stripe-modal').classList.add('hidden');
+        }
 
         // UIイベント制御: 歯車設定ボタンとドロップダウン
         const settingsBtn = document.getElementById('settings-btn');
@@ -610,27 +720,26 @@
             document.getElementById('passcode-input').value = "";
         }
 
+        // パスコード検証ロジック (ocr-mikke-2025)
         function verifyPasscode() {
             const input = document.getElementById('passcode-input').value.trim();
-            if (input === "mikke-safe-2026" || input === "spc-mikke-9800") {
+            if (input === "ocr-mikke-2025") {
                 isLicensed = true;
                 localStorage.setItem('mikke_ocr_licensed', 'true');
                 setAuthUIState(true);
+                updateTrialBadge();
                 closeAuthModal();
-                showModal('認証に成功しました！', 'おめでとうございます！ロックが解除され、本物接続（Cloudflare Workers 連携）が有効化されました。画像を投げ込むと、本当にAIが文字起こしします。');
+                showModal('ライセンス認証に成功しました！', '月額9,800円プランの有効化を確認しました。セキュリティロックが正常解除され、本物接続（Cloudflare Workers 連携）が永続的に無制限で有効化されました！');
             } else {
-                showModal('エラー', 'パスコードが正しくありません。入力文字をご確認ください。');
+                showModal('エラー', 'パスコードが正しくありません。お送りした契約パスコードをご確認ください。');
             }
         }
 
         function setAuthUIState(authenticated) {
             const btn = document.getElementById('auth-btn');
-            const btnText = document.getElementById('auth-btn-text');
-            const btnIcon = document.getElementById('auth-btn-icon');
 
             if (authenticated) {
                 btn.className = "text-xs bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-emerald-500/30 transition-all font-black text-white shadow-sm";
-                btnText.innerText = "認証完了（本物接続中）";
                 btn.removeAttribute('style'); // アニメーション除去
                 btn.classList.remove('animate-pulse');
                 
@@ -638,7 +747,6 @@
                 btn.innerHTML = `<i data-lucide="unlock" class="w-4 h-4 text-white"></i> <span>認証完了（本物接続中）</span>`;
             } else {
                 btn.className = "text-xs bg-amber-500 hover:bg-amber-600 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-amber-400/30 transition-all font-black text-slate-950 shadow-sm animate-pulse";
-                btnText.innerText = "ライセンス認証";
                 btn.innerHTML = `<i data-lucide="lock" class="w-4 h-4 text-slate-950"></i> <span>ライセンス認証</span>`;
             }
             lucide.createIcons();
@@ -654,7 +762,6 @@
                 const btn = document.getElementById(`btn-mode-${m}`);
                 if (m === mode) {
                     btn.className = "mode-btn flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl border-2 border-teal-500 bg-teal-50/50 text-teal-900 transition-all font-medium";
-                    // アイコンの色戻し
                     btn.querySelector('i').className = "w-5 h-5 sm:w-6 sm:h-6 mb-1 text-teal-600";
                 } else {
                     btn.className = "mode-btn flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl border-2 border-slate-200 hover:border-slate-300 text-slate-600 transition-all font-medium";
@@ -708,10 +815,8 @@
         }
 
         function triggerCamera() {
-            // モバイルなどでカメラ起動しやすいようにcapture属性を促す
             fileInput.setAttribute('capture', 'environment');
             fileInput.click();
-            // 終わったら戻しておく
             setTimeout(() => {
                 fileInput.removeAttribute('capture');
             }, 1000);
@@ -719,6 +824,9 @@
 
         // ファイル読み込み処理
         function handleFile(file) {
+            // 体験カウントチェック (4回目ならStripeを立ち上げる)
+            if (!checkAndIncrementTrial()) return;
+
             if (!file.type.startsWith('image/')) {
                 if (file.type === 'application/pdf') {
                     showModal('PDFファイルの読み込みについて', 'プロトタイプ版では、画像のアップロード、または「デモデータ読み込み」をご利用ください。本番システムではPDFファイルの直接読み取りも可能です。');
@@ -732,21 +840,24 @@
             reader.onload = function(e) {
                 base64Image = e.target.result;
                 
-                // ライセンスが解除されており、且つWorkersのAPIURLが設定されている場合にのみ本稼働
+                // 認証済みか、Workers連携が存在する場合
                 if (isLicensed && WORKERS_API_URL !== "") {
                     runActualWorkersOCR(base64Image);
                 } else {
-                    if (!isLicensed) {
-                        showModal('デモ稼動中', '現在ライセンス未認証のため、自動で体験用デモデータが表示されます。ヘッダーの「ライセンス認証」からパスコードをセットすると本物のAI-OCRが動き出します！');
-                    }
                     runDemo(base64Image);
                 }
             };
             reader.readAsDataURL(file);
         }
 
-        // 【デモ実行機能】動きを完璧に見せるダミーデータ
+        // 【デモ実行機能】
         function runDemo(userUploadedImg = null) {
+            // 無料回数チェック
+            if (userUploadedImg === null) {
+                // デモボタンを直接クリックした時の判定
+                if (!checkAndIncrementTrial()) return;
+            }
+
             setLoading(true, "AIが帳票のレイアウトを自動解析中...");
 
             setTimeout(() => {
@@ -811,7 +922,7 @@
             }, 800);
         }
 
-        // 【Cloudflare Workers連携実稼動】 Workers経由で安全にGemini APIを叩く
+        // 【Cloudflare Workers連携実稼動】
         async function runActualWorkersOCR(imgBase64) {
             setLoading(true, "Cloudflare Workers経由でAIが超高精度解析中...");
 
@@ -954,7 +1065,6 @@
             executeClipboardCopy(text, 'テキスト（行形式）をコピーしました！');
         }
 
-        // CSV/TSV(Excel)用
         function copyToClipboardExcel() {
             if (!lastExtractedData) return;
             let text = "項目名\t値\n";
@@ -1116,9 +1226,11 @@
             lastExtractedData = null;
             isLicensed = false;
             localStorage.removeItem('mikke_ocr_licensed');
+            localStorage.setItem('mikke_ocr_trials', '0');
             setAuthUIState(false);
+            updateTrialBadge();
 
-            showToast('すべてのデモデータをクリアしました。');
+            showToast('すべてのデータをクリア・リセットしました。');
         }
 
         // --- ⚖️ 利用規約・プライバシーポリシーモーダル制御 ---
