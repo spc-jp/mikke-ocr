@@ -38,11 +38,6 @@
             </div>
             
             <div class="w-full sm:w-auto flex items-center justify-end gap-2 font-semibold">
-                <button onclick="openHelpModal()" class="text-xs bg-teal-700/50 hover:bg-teal-700/80 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1.5 border border-teal-500/30 transition-all font-bold text-white">
-                    <i data-lucide="help-circle" class="w-4 h-4"></i>
-                    <span>使い方</span>
-                </button>
-
                 <div class="relative">
                     <button id="settings-btn" class="text-xs bg-teal-700/50 hover:bg-teal-700/80 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-1.5 border border-teal-500/30 transition-all font-bold text-white">
                         <i data-lucide="settings" class="w-4 h-4"></i>
@@ -61,15 +56,15 @@
                     </div>
                 </div>
 
+                <button onclick="openHelpModal()" class="text-xs bg-teal-700/50 hover:bg-teal-700/80 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1.5 border border-teal-500/30 transition-all font-bold text-white">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                    <span>使い方</span>
+                </button>
+
                 <span id="trial-counter-badge" class="text-xs bg-emerald-700/50 text-white px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-teal-500/30 transition-all font-bold">
                     <i data-lucide="hourglass" class="w-3.5 h-3.5 text-yellow-300"></i>
                     <span>無料枠: あと <span id="trial-count">3</span> 回</span>
                 </span>
-
-                <button id="auth-btn" onclick="openAuthModal()" class="text-xs bg-amber-500 hover:bg-amber-600 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-amber-400/30 transition-all font-black text-slate-950 shadow-sm animate-pulse">
-                    <i id="auth-btn-icon" data-lucide="lock" class="w-4 h-4 text-slate-950"></i>
-                    <span id="auth-btn-text">ライセンス認証</span>
-                </button>
             </div>
         </div>
     </header>
@@ -716,18 +711,8 @@
         }
 
         function setAuthUIState(authenticated) {
-            const btn = document.getElementById('auth-btn');
-
-            if (authenticated) {
-                btn.className = "text-xs bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-emerald-500/30 transition-all font-black text-white shadow-sm";
-                btn.removeAttribute('style');
-                btn.classList.remove('animate-pulse');
-                btn.innerHTML = `<i data-lucide="unlock" class="w-4 h-4 text-white"></i> <span>認証完了（本物接続中）</span>`;
-            } else {
-                btn.className = "text-xs bg-amber-500 hover:bg-amber-600 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg flex items-center gap-1 border border-amber-400/30 transition-all font-black text-slate-950 shadow-sm animate-pulse";
-                btn.innerHTML = `<i data-lucide="lock" class="w-4 h-4 text-slate-950"></i> <span>ライセンス認証</span>`;
-            }
-            lucide.createIcons();
+            // ヘッダーの「ライセンス認証」ボタンは廃止。
+            // 認証完了状態は updateTrialBadge() の「有料プラン：無制限」表示で示す。
         }
 
         function setMode(mode) {
